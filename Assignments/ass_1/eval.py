@@ -26,16 +26,16 @@ in that, we can implement in playing the game.
 
 def populate_board(board):
 	# Place player pieces.
-	board.place((3,1),PLAYER)
-	board.place((4,3),PLAYER)
-	board.place((5,3),PLAYER)
-	board.place((5,4),PLAYER)
+	#board.place((3,1),PLAYER)
+	#board.place((4,3),PLAYER)
+	#board.place((5,3),PLAYER)
+	#board.place((5,4),PLAYER)
 
 	# Play AI pieces.
 	board.place((3,2),AI)
-	board.place((4,2),AI)
-	board.place((5,2),AI)
-	board.place((3,3),AI)
+	#board.place((4,2),AI)
+	#board.place((5,2),AI)
+	#board.place((3,3),AI)
 
 	board.print()
 
@@ -43,7 +43,7 @@ def AI_shortest_path(board):
 	# Create list of possible starting positions.
 	starting_point = []
 	for i in range(BOARD_SIZE):
-		starting_point.append((i,0))
+		starting_point.append((0,i))
 
 	# Make a distance graph.
 	distance_graph = np.zeros((BOARD_SIZE,BOARD_SIZE))
@@ -53,9 +53,11 @@ def AI_shortest_path(board):
 		current_point = starting_point[i]
 		
 		visited = []
-		distance_graph[current_point[0],current_point[1]] = 0
+		distance_graph[current_point[1],current_point[0]] = 0
 
 		update_distances(board,current_point,distance_graph,visited)
+
+	print(distance_graph)
 
 
 
@@ -63,12 +65,12 @@ def PLAYER_shortest_path(board):
 	# Create list of possible starting positions.
 	starting_point = []
 	for i in range(BOARD_SIZE):
-		starting_point.append((i,0))
+		starting_point.append((0,i))
 	print(starting_point)
 
 
 def update_distances(board,current_point,distance_graph,visited):
-	cur_distance = distance_graph[current_point[0],current_point[1]]
+	cur_distance = distance_graph[current_point[1],current_point[0]]
 	shortest = INF
 	next_point = []
 
@@ -78,18 +80,23 @@ def update_distances(board,current_point,distance_graph,visited):
 	#print(visited)
 
 	for i in range(len(neighbors)):
-		if neighbors[i] not in visited:
-	
+		if neighbors[i] not in visited and board.is_color(neighbors[i],PLAYER) == False:
 			next_distance = cur_distance + 1
 
-			if next_distance < distance_graph[neighbors[i][0],neighbors[i][1]]:
-				distance_graph[neighbors[i][0],neighbors[i][1]] = next_distance
+			# If a point has the same color, distance won't change.
+			if board.is_color(neighbors[i],AI) == True:
+				distance_graph[neighbors[i][1],neighbors[i][0]] = cur_distance
+				print('hoi')
+
+			# Change the value of the neighbours to the current value + 1, if it is lower than the current value.
+			if next_distance < distance_graph[neighbors[i][1],neighbors[i][0]]:
+				distance_graph[neighbors[i][1],neighbors[i][0]] = next_distance
 			if next_distance < shortest:
 				next_point = neighbors[i]
 
 	visited.append(current_point)
 
-	print(distance_graph)
+	#print(distance_graph)
 
 	if len(next_point) != 0:
 		update_distances(board,next_point,distance_graph,visited)
