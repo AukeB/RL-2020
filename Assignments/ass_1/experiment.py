@@ -1,11 +1,12 @@
 # Reincorment Learning 2020 - Assignment 1: Heuristic Planning
-# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella ()
+# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella (s2384949).
 # This file contains part 5 of the assignment: Experiment.
 
 # Imports.
 import numpy as np
 from hex_skeleton import HexBoard
 import random as rd
+from trueskill import Rating, quality_1vs1, rate_1vs1
 import search
 import evaluation 
 import sys 
@@ -101,9 +102,28 @@ f.close()
 
 while not board.game_over:
 	search_depth = 3
-	eval_val = alphabeta(virtual_board,d=search_depth,a=-INF,b=INF,p1=AI,p2=AI2,ev='dijkstra',mx=True)
+	eval_val = alphabeta(virtual_board,d=search_depth,a=-INF,b=INF,p1=AI,p2=AI2,ev='random',mx=True)
 	search.ai_make_move(board)
 
-	search_depth = 4
+	search_depth = 3
 	eval_val = alphabeta(virtual_board,d=search_depth,a=-INF,b=INF,p1=AI2,p2=AI,ev='dijkstra',mx=True)
 	ai2_make_move(board)
+
+
+r1,r2 = Rating(),Rating()
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r1,r2)
+r1,r2 = rate_1vs1(r2,r1)
+r1,r2 = rate_1vs1(r1,r2)
+
+print(r1,r2)
+

@@ -1,5 +1,5 @@
 # Reincorment Learning 2020 - Assignment 1: Heuristic Planning
-# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella ()
+# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella (s2384949).
 # This file contains part 3 of the assignment: Search.
 
 # Imports.
@@ -9,7 +9,7 @@ import random as rd
 import sys 
 
 # Global variables
-BOARD_SIZE = 5
+BOARD_SIZE = 4
 SEARCH_DEPTH = 2
 AI = HexBoard.BLUE
 PLAYER = HexBoard.RED

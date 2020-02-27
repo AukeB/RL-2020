@@ -1,5 +1,5 @@
 # Reincorment Learning 2020 - Assignment 1: Heuristic Planning
-# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella ()
+# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella (s2384949).
 # This file contains part 4 of the assignment: Evaluation.
 
 # Imports.
