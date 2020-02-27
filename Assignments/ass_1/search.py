@@ -1,5 +1,5 @@
 # Reincorment Learning 2020 - Assignment 1: Heuristic Planning
-# Auke Bruinsma (s1594443), Meng Yao,
+# Auke Bruinsma (s1594443), Meng Yao (s2308266), Ella ()
 # This file contains part 3 of the assignment: Search.
 
 # Imports.
@@ -9,7 +9,7 @@ import random as rd
 import sys 
 
 # Global variables
-BOARD_SIZE = 4
+BOARD_SIZE = 5
 SEARCH_DEPTH = 2
 AI = HexBoard.BLUE
 PLAYER = HexBoard.RED
@@ -68,7 +68,6 @@ def alphabeta(board,d,a,b,mx=True):
 					f.close()
 
 					board.make_empty((i,j))
-					#virtual_board.print()
 					if a >= g:
 						break
 	if d == SEARCH_DEPTH:
