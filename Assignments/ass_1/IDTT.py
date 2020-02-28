@@ -19,6 +19,22 @@ PLAYER = HexBoard.RED
 EMPTY = HexBoard.EMPTY
 INF = 11
 
+def lookup(board, d):
+    with open('transposition_table.txt','r') as f:
+        lines = f.read().splitlines()
+        for line in lines:
+            if line.split(', ')[0] == board:
+                shallow = 0
+                if line.split(', ')[2] == d:
+                    return True, line.split(', ')[1], line.split(', ')[3]
+                # Should we find the bm for the second deepest search??
+                # if not hit at this depth , still use tt−bestmove
+                else:
+                    if line.split(', ')[2] > shallow:
+                        shallow = line.split(', ')[2]
+                        second_deepest = [False, line.split(', ')[1], line.split(', ')[3]]
+    return second_deepest[0], second_deepest[1], second_deepest[2]
+
 def store(board,g,d,bm):
 	f = open('transposition_table.txt','a')
 	f.write(f'{board},{g},{d},{bm}\n')
