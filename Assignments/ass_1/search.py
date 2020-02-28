@@ -9,7 +9,7 @@ import random as rd
 import sys 
 
 # Global variables
-BOARD_SIZE = 4
+BOARD_SIZE = 3
 SEARCH_DEPTH = 2
 AI = HexBoard.BLUE
 PLAYER = HexBoard.RED
