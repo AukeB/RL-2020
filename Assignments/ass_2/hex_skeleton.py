@@ -126,8 +126,12 @@ class HexBoard:
 		for i in range(BOARD_SIZE):
 			for j in range(BOARD_SIZE):
 				if board.is_empty((i,j)):
-					available_moves.append((i,j)) 
-		return available_moves[int(np.random.choice(np.linspace(0,len(available_moves)-1,len(available_moves))))]
+					available_moves.append((i,j))
+		if available_moves == []:
+			return available_moves
+		else:
+		#print(available_moves)
+			return available_moves[int(np.random.choice(np.linspace(0,len(available_moves)-1,len(available_moves))))]
 
 	def move_check_win(self,board,BOARD_SIZE,last_move=BLUE):
 		move = self.random_move(board,BOARD_SIZE)

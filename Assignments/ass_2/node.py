@@ -62,10 +62,10 @@ class Node:
 					board.virtual_place((i,j),HexBoard.BLUE)
 					node.add_children(node,board)
 					node.add_moves(node,(i,j))
-					print(node.childNodes)
-					print(node.childNodes[-1].V)
+					#print(node.childNodes)
+					#print(node.childNodes[-1].V)
 					#print(node.V)
-					board.print()
+					#board.print()
 					board.make_empty((i,j))
 
 	def check_visits(self,node):

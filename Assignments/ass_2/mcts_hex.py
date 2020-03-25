@@ -11,13 +11,25 @@ import random as rd
 import sys 
 
 # Global variables
-BOARD_SIZE = 2
-SEARCH_DEPTH = 2
+BOARD_SIZE = 3
+#SEARCH_DEPTH = 2
 AI = HexBoard.BLUE
 PLAYER = HexBoard.RED
 EMPTY = HexBoard.EMPTY
 inf = float('inf')
 C_p = 1
+
+# Digit to letter conversion.
+def d2l_conversion(x_coor):
+	letter_arr = np.array(['a','b','c','d','e','f','g','h','i','j']) # Max a playfield of 10 by 10.
+	return letter_arr[x_coor]
+
+# Letter to digit conversion.
+def l2d_conversion(letter):
+	letter_arr = np.array(['a','b','c','d','e','f','g','h','i','j'])
+	for i in range(len(letter_arr)):
+		if letter == letter_arr[i]:
+			return i
 
 def MCTS(rootstate,itermax):
 	# Initialise rootnote.
@@ -30,7 +42,10 @@ def MCTS(rootstate,itermax):
 
 		action = node.check_visits(node)
 
+		counter = 0 # Solves a bug.
+
 		while action != True:
+			counter += 1
 			action = node.check_visits(node)
 			if action == False:
 				node.collapse(node,board,BOARD_SIZE)
@@ -40,13 +55,13 @@ def MCTS(rootstate,itermax):
 				action = node.check_visits(node)
 				if action == False:
 					node.collapse(node,board,BOARD_SIZE)
+			if counter == 10:
+				action = True
 
 		# Select
 		while node.childNodes != []: # If there are children ...
 			node,move = node.UCTSelectChild(C_p,inf)
 			board.virtual_place(move,AI)
-
-		print('val:', node.V)
 
 		# Check if the node has been visited.
 		if node.V == 0:
@@ -59,16 +74,33 @@ def MCTS(rootstate,itermax):
 				break;
 			node = node.parent
 
-		node.tree_info(rootnode,C_p,inf)
+		#node.tree_info(rootnode,C_p,inf)
 
 	return node.UCTSelectChild(C_p,inf)[1]
 
+# Player makes a move.
+def player_make_move(board):
+	print('Next move.')
+	x = l2d_conversion(input(' x: '))
+	y = int(input(' y: '))
+	
+	board.place((x,y),PLAYER)
+	
 if __name__ == '__main__':
 	# Initialise a board.
 	board = HexBoard(BOARD_SIZE)
+	board.print()
 
-	# Number of iterations.
-	itermax = 6
+	itermax = 100
 
-	best_move = MCTS(board,itermax)
-	print(best_move)
+	while not board.game_over:
+		board.place((MCTS(board,itermax)),AI)
+		board.print()
+		if board.check_win(AI):
+			print('AI has won.')
+			break
+		player_make_move(board)
+		board.print()
+		if board.check_win(PLAYER):
+			print('PLAYER has won.')
+
