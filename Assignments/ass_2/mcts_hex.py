@@ -9,6 +9,7 @@ from hex_skeleton import HexBoard
 from node import Node
 import random as rd
 import sys 
+import time 
 
 # Global variables
 BOARD_SIZE = 3
@@ -31,11 +32,11 @@ def l2d_conversion(letter):
 		if letter == letter_arr[i]:
 			return i
 
-def MCTS(rootstate,itermax):
+def MCTS(rootstate,itermax,timemax=600):
 	# Initialise rootnote.
 	rootnode = Node(state = rootstate)
 	node = rootnode
-
+	start_time = time.time()
 	# Loop until the max number of iterations is reached.
 	for i in range(itermax):
 		board = copy.deepcopy(rootstate)
@@ -66,6 +67,14 @@ def MCTS(rootstate,itermax):
 		# Check if the node has been visited.
 		if node.V == 0:
 			result = board.move_check_win(board,BOARD_SIZE) # Playout.
+			# Or we can use possible moves to accomplish playout
+			"""
+			moves = board.searchmoves()
+			empty_num = len(moves)
+			for _ in range(empty_num):
+				board.place(moves.pop(rd.randint(0,len(moves)-1)),color)
+				color = board.get_opposite_color(color)
+			"""
 
 		# Backpropagate:
 		while node != None:
@@ -75,7 +84,8 @@ def MCTS(rootstate,itermax):
 			node = node.parent
 
 		#node.tree_info(rootnode,C_p,inf)
-
+		if time.time() - start_time > timemax:
+			break
 	return node.UCTSelectChild(C_p,inf)[1]
 
 # Player makes a move.
@@ -83,8 +93,16 @@ def player_make_move(board):
 	print('Next move.')
 	x = l2d_conversion(input(' x: '))
 	y = int(input(' y: '))
-	
-	board.place((x,y),PLAYER)
+	if (x >= 0 and x < BOARD_SIZE and y >= 0 and y < BOARD_SIZE) == 0:
+		print("Invalid move: Outside the board. Please play again.")
+		player_make_move(board)
+	else:
+		if(board.is_empty((x,y))):
+			# Only place the move when the position is inside the board and empty.
+			board.place((x,y),PLAYER)
+		else:
+			print("Invalid move: Position has been occupied. Please play again.")
+			player_make_move(board)
 	
 if __name__ == '__main__':
 	# Initialise a board.
@@ -104,3 +122,5 @@ if __name__ == '__main__':
 		if board.check_win(PLAYER):
 			print('PLAYER has won.')
 
+
+	
