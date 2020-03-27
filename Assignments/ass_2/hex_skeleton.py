@@ -56,7 +56,7 @@ class HexBoard:
 		neighbors = []
 		if cx-1>=0:   neighbors.append((cx-1,cy))
 		if cx+1<self.size: neighbors.append((cx+1,cy))
-		if cx-1>=0	and cy+1<=self.size-1: neighbors.append((cx-1,cy+1))
+		if cx-1>=0    and cy+1<=self.size-1: neighbors.append((cx-1,cy+1))
 		if cx+1<self.size  and cy-1>=0: neighbors.append((cx+1,cy-1))
 		if cy+1<self.size: neighbors.append((cx,cy+1))
 		if cy-1>=0:   neighbors.append((cx,cy-1))
@@ -156,11 +156,3 @@ class HexBoard:
 					return self.move_check_win(board,BOARD_SIZE,HexBoard.RED)
 				if last_move == HexBoard.RED:
 					return self.move_check_win(board,BOARD_SIZE,HexBoard.BLUE)
-	def searchmoves(self):
-		# search all possible moves
-		moves = []
-		for i in range(self.size):
-			for j in range(self.size):
-				if(self.is_empty((i,j))):
-					moves.append((i,j))
-		return moves
