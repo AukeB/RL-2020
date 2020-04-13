@@ -114,16 +114,28 @@ def make_train_sets(threshold=-0.2):
 	return train_data
 
 def data_trainer(train_data):
-	X = np.array([i[0] for i in train_data]).reshape(-1,len(train_data[0][0]))
-	y = np.array([i[1] for i in train_data]).reshape(-1,len(train_data[0][1]))
+	# Create two lists so that we can store data in there in the correct format for the Keras model.
+	observations = []
+	actions = []
 
-	model = Sequential()
-	model.add(Dense(128,input_dim=len(X[0]),activation='relu'))
-	model.add(Dense(52,activation='relu'))
-	model.add(Dense(len(y[0]),activation='linear'))
+	# Loop trhough data.
+	for i in range(len(train_data)):
+		observation = (train_data[i][0][0],train_data[i][0][1])
+		action = (train_data[i][1][0],train_data[i][1][1],train_data[i][1][2])
+		observations.append(observation)
+		actions.append(action)
+
+	# Convert to numpy arrays.
+	observations = np.asarray(observations)
+	actions = np.asarray(actions)
+
+	model = Sequential() # Make a linear neural network model.
+	model.add(Dense(100,input_dim=len(observations[0]),activation='relu')) # Set up some nodes with relu activation function.
+	model.add(Dense(50,activation='relu'))
+	model.add(Dense(len(actions[0]),activation='linear')) # Linear activation.
 	model.compile(loss='mse',optimizer=Adam())
 
-	model.fit(X,y,epochs=train_iterations)
+	model.fit(observations,actions,epochs=train_iterations)
 	return model
 
 def play_game(model,visual=True):
