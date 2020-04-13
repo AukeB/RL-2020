@@ -25,7 +25,7 @@ num_steps = 200 # Steps in a single simulation.
 
 max_actions = 3 # In this specific environment there are 3 possible actions.
 threshold = -0.2 # Position threshold that will allow the reward to be equal to 1 instead of -1.
-train_iterations = 10 # Number of training iterations.
+train_iterations = 50 # Number of training iterations.
 play_games = 5 # Number of times network will be playing the game after training.
 
 def random_actions(printformat=1,visual=False):
@@ -113,6 +113,16 @@ def make_train_sets(threshold=-0.2):
 
 	return train_data
 
+def loss_plotter(data):
+	plt.figure(figsize=(12,8))
+	plt.plot(data.history['loss'])
+	plt.title('Model accuracy',fontsize=18)
+	plt.xlabel('Epoch',fontsize=15)
+	plt.ylabel('Loss',fontsize=15)
+	plt.savefig('loss.png')
+	plt.show()	
+	plt.close()
+
 def data_trainer(train_data):
 	# Create two lists so that we can store data in there in the correct format for the Keras model.
 	observations = []
@@ -135,7 +145,10 @@ def data_trainer(train_data):
 	model.add(Dense(len(actions[0]),activation='linear')) # Linear activation.
 	model.compile(loss='mse',optimizer=Adam())
 
-	model.fit(observations,actions,epochs=train_iterations)
+	history = model.fit(observations,actions,epochs=train_iterations)
+
+	loss_plotter(history)
+
 	return model
 
 def play_game(model,visual=True):
